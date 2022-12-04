@@ -1,6 +1,13 @@
 [en]
-title = "Very small p-values are not insignificant"
+title = "My blog"
 weight = 1
 LanguageName = "EN"
-contentDir = /post/
+contentDir = "content/english"
 
+[ar]
+title = "فلانة الفلانية"
+description = "أنا أعمل كمطورة ويب في شركة س"
+contentDir = "content/arabic" 
+weight = 2
+LanguageDirection = "rtl" 
+LanguageName = "AR"
