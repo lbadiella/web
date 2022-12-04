@@ -1,7 +1,7 @@
 ---
-title: Lord's paradox and the third statistician
-author: ''
-date: '2022-12-04'
+title: "Lord's paradox and the third statistician"
+author: 'Llorenç Badiella'
+date: '2022-12-05'
 slug: []
 categories: []
 tags: []
