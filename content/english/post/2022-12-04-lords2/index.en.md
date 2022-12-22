@@ -9,6 +9,8 @@ categories: []
 disableComments: no
 ---
 
+
+
 The paradox presented by Lord in 1967 describes the following situation:
 
 > A large university is interested in investigating the effects on the students of the diet provided in the university dining halls and any sex differences in these effects. Various types of data are gathered. In particular, the weight of each student at the time of his arrival in September and his weight the following June are recorded. 
@@ -23,7 +25,20 @@ The paradox presented by Lord in 1967 describes the following situation:
 
 The data may look like this:
 
-<img src="{{< blogdown/postref >}}index.en_files/figure-html/p1-1.png" width="672" />
+
+
+
+```r
+library(ggplot2)
+ggplot(bd,aes(x=W1,y=W2,color=factor(sex))) + geom_point() +
+scale_color_manual(values=c("#E69F00", "#56B4E9")) +
+coord_fixed(xlim=c(30,90),ylim=c(30,90))  + theme(aspect.ratio=1) + theme_bw() + labs(x="Weight June",y="Weight September",color="Sex")
+```
+
+<div class="figure">
+<img src="{{< blogdown/postref >}}index.en_files/figure-html/f1-1.png" alt="Weight by group and period" width="672" />
+<p class="caption">Figure 1: Weight by group and period</p>
+</div>
 
 The average and variance for each group are the same in both periods.
 

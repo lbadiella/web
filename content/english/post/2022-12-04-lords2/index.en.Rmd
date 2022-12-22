@@ -9,6 +9,8 @@ categories: []
 disableComments: no
 ---
 
+
+
 The paradox presented by Lord in 1967 describes the following situation:
 
 > A large university is interested in investigating the effects on the students of the diet provided in the university dining halls and any sex differences in these effects. Various types of data are gathered. In particular, the weight of each student at the time of his arrival in September and his weight the following June are recorded. 
@@ -32,7 +34,9 @@ bd$Ch <- bd$W2 - bd$W1
 
 bd$sex <- as.factor(bd$sex)
 levels(bd$sex)<-c("Female","Male")
+```
 
+```{r f1, fig.cap = "Weight by group and period"} 
 library(ggplot2)
 ggplot(bd,aes(x=W1,y=W2,color=factor(sex))) + geom_point() +
 scale_color_manual(values=c("#E69F00", "#56B4E9")) +
