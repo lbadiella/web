@@ -21,8 +21,7 @@ The paradox presented by Lord in 1967 describes the following situation:
 
 ### The data
 
-https://www.degruyter.com/document/doi/10.1515/jci-2016-0021/html
-
+The data may look like this:
 
 ```{r p1, echo=FALSE, cache=FALSE, warning=FALSE, fig=TRUE}
 set.seed(2)
@@ -39,4 +38,6 @@ ggplot(bd,aes(x=W1,y=W2,color=factor(sex))) + geom_point() +
 scale_color_manual(values=c("#E69F00", "#56B4E9")) +
 coord_fixed(xlim=c(30,90),ylim=c(30,90))  + theme(aspect.ratio=1) + theme_bw() + labs(x="Weight June",y="Weight September",color="Sex")
 ```
+
+The average and variance for each group are the same in both periods.
 

@@ -21,8 +21,9 @@ The paradox presented by Lord in 1967 describes the following situation:
 
 ### The data
 
-https://www.degruyter.com/document/doi/10.1515/jci-2016-0021/html
-
+The data may look like this:
 
 <img src="{{< blogdown/postref >}}index.en_files/figure-html/p1-1.png" width="672" />
+
+The average and variance for each group are the same in both periods.
 
