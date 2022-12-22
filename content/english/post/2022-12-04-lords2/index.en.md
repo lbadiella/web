@@ -27,18 +27,16 @@ The data may look like this:
 
 
 
-
-```r
-library(ggplot2)
-ggplot(bd,aes(x=W1,y=W2,color=factor(sex))) + geom_point() +
-scale_color_manual(values=c("#E69F00", "#56B4E9")) +
-coord_fixed(xlim=c(30,90),ylim=c(30,90))  + theme(aspect.ratio=1) + theme_bw() + labs(x="Weight June",y="Weight September",color="Sex")
-```
-
 <div class="figure">
 <img src="{{< blogdown/postref >}}index.en_files/figure-html/f1-1.png" alt="Weight by group and period" width="672" />
 <p class="caption">Figure 1: Weight by group and period</p>
 </div>
 
-The average and variance for each group are the same in both periods.
+
+<div class="figure">
+<img src="{{< blogdown/postref >}}index.en_files/figure-html/f2-1.png" alt="Weight distribution by group and period" width="672" />
+<p class="caption">Figure 2: Weight distribution by group and period</p>
+</div>
+
+The average and variance for each group are essentially the same in both periods.
 
