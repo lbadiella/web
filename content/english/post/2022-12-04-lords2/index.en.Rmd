@@ -26,11 +26,11 @@ The paradox presented by Lord in 1967 describes the following situation:
 The data may look like this:
 
 ```{r p1, echo=FALSE, cache=FALSE, warning=FALSE, fig=TRUE}
-set.seed(21)
+set.seed(321)
 bd <- data.frame(id=seq(1:200), sex=rep(c(0,1),each=100),x=rnorm(200))
 bd$W1 <- 50 + bd$x*5 + bd$sex*15 + rnorm(200)*5
 bd$W2 <- 50 + bd$x*5 + bd$sex*15 + rnorm(200)*5
-bd$Ch <- bd$W2 - bd$W1
+bd$Change <- bd$W2 - bd$W1
 
 bd$sex <- as.factor(bd$sex)
 levels(bd$sex)<-c("Female","Male")
@@ -56,5 +56,104 @@ scale_color_manual(values=c("#E64F00", "#E69F50", "#56B4E9", "#31D4E4")) +
 theme(aspect.ratio=1) + theme_bw() + labs(fill="")
 ```
 
-The average and variance for each group are essentially the same in both periods.
+The average and variance for each group are essentially the same in each periods. However, individual weights did not remain constant...
+
+
+### The problem
+
+
+Through the years, several authors have discussed the original problem. Here we have several examples:
+
+- **Lord (1967):** Granted the usual linearity assumptions of the analysis of covariance, **the conclusions of each statistician are visibly correct**. The usual research study of this type is attempting to answer a question that **simply cannot be answered in any rigorous way on the basis of available data**.
+
+ - **Bock (1975):**Both statisticians in the scenario are correct once the question being asked is clarified. The first statistician asks: “Is there a difference in the average gain in weight of the population?” and correctly answered: “No!” The second statistician asks: “Is a man expected to show a greater weight gain than a woman, given that they are initially of the same weight?” and answers it correctly: “Yes!”
+
+- **Cox and McCullagh (1982)**: The first statistician was right when asking about group differences, while the second was right when asking about the effect on an individual.
+
+- **Holland and Rubin (1983)**: Both statisticians are correct: their statements simply describe the situation. But no causal conclusions can be reached. 
+
+- **Pearl (2010)**: None of these early responses is satisfactory because they fail to address what misaligns with intuition, namely that the outcomes seemingly violate the sure-thing principle. This principle states that if a causal relation holds for all subpopulations, then it should hold for the whole population. **The two statisticians are asking two different questions, with the first one asking about the total effect, and the second asking about the direct effect**. 
+
+The discussions deals with the necessity of adjusting by confounders, and wether in this case initial weight is a confounder, a mediator or what. 
+
+
+### The Analysis of the original problem
+
+**First Statistician:**
+
+The first statistician uses the following model, with weigth change as response variable and sex as the only explanatory variable:
+
+```{r p2a, echo=TRUE, cache=FALSE, warning=FALSE, results=FALSE}
+(summary(lm(Change ~ sex,bd))) 
+```
+She obtains that there are no differences in weight change between sex groups.
+
+**Second statistician:**
+
+The second statistician, fits a similar model using the final weight as the response variable and corrects the analysis by the initial weight since it is a confounder.
+
+```{r p2b, echo=TRUE, cache=FALSE, warning=FALSE, results=FALSE}
+(summary(lm(September ~ June + sex ,bd))) 
+```
+
+She obtains that there are differences between boys and girls.
+
+
+## My opinion
+
+The previous approaches discuss the necessity of adjusting by a covariate if it is a confounder and to be very careful if it is a mediator. In the present example, since dinning halls and diets and sexes are confused with each other, we can agree that the study design is a complete disaster, and that no solid conclusions could be obtained.
+
+See that according to the second statistician the diet effect can be described as 
+ - Start with 27Kg 
+ - Add 46% of the weight in June 
+ - Add 7Kg for boys  
+
+What kind of diet could produce this effect? It has no sense...
+
+However, there is a different point of view that can add some clarity to understand why both statisticians reach different conclusions.
+
+
+### Measurement error
+
+Observing the results obteined by the second statistician we can realize that the effect produced by the diet (and given by the model) is quite implausible. The September weight is given by the model's formula and corresponds to an intercept plus a proportion of the weight in June and some amount depending on the sex and finally a random perturbation.   
+
+This abnormal consequence of the diet could be explained by a wrong model proposal.
+
+A simpler model could explain the results: What if we consider that the explanatory variable has been measured with error?
+
+In this case, the model can be fitted now using as Structural Equation Model as follows:
+
+```{r l1, echo=TRUE}
+library(lavaan)
+bd$sex <- as.numeric(bd$sex)
+mod = "
+W0 =~ 1*June 
+W0 ~~ w*W0
+June ~~ v*June
+September ~ 1 + W0 + sex
+w == v * 3
+"
+summary(sem(mod, data=bd))
+
+```
+
+Now, the adjusted analysis including the covariate gives a similar result as the unadjusted model. Both statisticians would have obtained the same conclusion if they had considered that initial weight could have been measured with error.
+
+
+
+### References
+
+Pearl, J. 2014. *Lord's Paradox Revisited -- (Oh Lord! Kumbaya!)*. [link](http://ftp.cs.ucla.edu/pub/stat_ser/r436.pdf)
+
+Senn, S. 2006. *Change from baseline and analysis of covariance revisited*. [link](http://onlinelibrary.wiley.com/doi/10.1002/sim.2682/pdf)
+
+Clark, M. 2016. *Lord’s Paradox*. [link](https://github.com/m-clark/lords-paradox)
+
+Lord, F. M. 1967. *A paradox in the interpretation of group comparisons*.Psychological Bulletin 68304–305.
+
+Holland, P. and Rubin, D. 1983. *On Lord’s paradox. InPrincipals of Modern Psycho-logical Measurement*. Lawrence Earlbaum, Hillsdale, NJ,3–25
+
+Bock, R. 1975. *Multivariate statistical methods in behavioral research*. McGraw-Hill, NY.
+
+Cox, D. and McCullagh, P. 1982. *A biometrics invited paper with discussion. someaspects of analysis of covariance*. Biometrics 38541–561.
 
